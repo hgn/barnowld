@@ -1,0 +1,14 @@
+[package]
+name = "barnowld"
+authors = ["Hagen Paul Pfeifer <hagen@jauu.net>"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = "4.4.4"
+libc = "0.2.148"
+nix = {version = "0.27.1",  features = ["fs"] }
+perf-event = "0.4.8"
+rand = "0.8.5"
+log = "^0.4"
+systemd-journal-logger = "1.0.0"

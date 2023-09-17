@@ -1,0 +1,26 @@
+[Unit]
+Description=barnowld - Real-Time Cache Side-Channel Attacks Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/barnowld -d
+Restart=always
+#StandardOutput=null
+#StandardError=null
+
+# for opening perf
+User=root
+Group=root
+
+# some security measures
+NoNewPrivileges=true
+WorkingDirectory=/
+LimitNOFILE=1024
+LimitNPROC=4096
+PrivateTmp=true
+ProtectSystem=full
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
