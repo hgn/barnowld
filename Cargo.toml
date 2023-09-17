@@ -1,5 +1,6 @@
 [package]
 name = "barnowld"
+authors = ["Hagen Paul Pfeifer <hagen@jauu.net>"]
 version = "0.1.0"
 edition = "2021"
 
