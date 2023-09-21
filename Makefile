@@ -19,3 +19,6 @@ format:
 format-check:
 	cargo fmt --all -- --check
 
+install-pocs:
+	@mkdir poc
+	git clone https://github.com/crozone/SpectrePoC.git poc/spectre-poc
