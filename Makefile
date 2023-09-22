@@ -7,6 +7,9 @@ build:
 release:
 	cargo build --release
 
+clippy:
+	cargo clippy
+
 run:
 	cargo run
 
