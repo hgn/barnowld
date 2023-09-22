@@ -5,6 +5,10 @@ animal world. Just the thing to detect microscopic but massive cache misses and
 other unnatural behavior.  Or because the name can easily be turned into a cute
 logo and was still free as a project name. You can choose the reason yourself.*
 
+**Warning:** barnowld is a PoC project. I have tested it with many different
+side-channel PoCs, and carefully tuned thresholds, but in the end it needs more
+validation to be used productively!
+
 Idea of the daemon: try to detect unnatural CPU characteristics with as little
 computational effort as possible, which can be traced back to side-channel
 attacks with a very high probability. If these are detected, report the whole
