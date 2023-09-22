@@ -7,7 +7,9 @@ logo and was still free as a project name. You can choose the reason yourself.*
 
 **Warning:** barnowld is a PoC project. I have tested it with many different
 side-channel PoCs, and carefully tuned thresholds, but in the end it needs more
-validation to be used productively!
+validation to be used productively! Some classes of side-channel attacks like
+*flush + flush attacks* are not detected - due to the fact that only cache
+charateristics are analysed.
 
 ---
 
@@ -17,11 +19,12 @@ attacks with a very high probability. If these are detected, report the whole
 thing to the system log. Log monitoring systems for cloud systems, for example,
 can trigger a warning when these messages are detected.
 
-Some scientific publications are available on the Internet. The problem with
-these is that they often involve machine learning and other compute intensive
-requirements or are complex to operate (in terms of CPU resources). In
-addition, the source code is usually not available, why I decided to implement
-this independently in this form. But I am always grateful for
+Related work: some scientific publications are available on the Internet. The
+problem with these is that they often involve machine learning and other
+compute intensive requirements or are complex to operate (in terms of CPU
+resources). In addition, the source code is usually not available, why I
+decided to implement this independently in this form. But I am always grateful
+for references. See section *Related Work* for more information.
 
 # Implementation Aspects
 
@@ -52,6 +55,6 @@ If you use updated microcode to fix speculative execution side-channel attacks
 some of the provided PoCs may also not work at your local PC.
 
 
-# References
+# Related Work
 
 - https://yinqian.org/papers/dimva21.pdf
