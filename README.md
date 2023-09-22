@@ -9,6 +9,8 @@ logo and was still free as a project name. You can choose the reason yourself.*
 side-channel PoCs, and carefully tuned thresholds, but in the end it needs more
 validation to be used productively!
 
+---
+
 Idea of the daemon: try to detect unnatural CPU characteristics with as little
 computational effort as possible, which can be traced back to side-channel
 attacks with a very high probability. If these are detected, report the whole
