@@ -33,7 +33,16 @@ the RISC-V world) for abnormalities over a certain period of time. In doing so,
 it iterates over time and in a pseudo-random fashion over the CPUs to make
 countermeasures more difficult. Then Barnowl analyzes the cache reference and
 cache missrate for a certain amount of time - again pseudo-randomly. Here
-especially the last level cache charactetristics.
+especially the last level cache charactetristics. Basically the following Cache
+Side-Channel attacks should be detectable:
+
+- Flush+Reload
+- Prime+Probe
+- Evict+Time
+- Cross-VM Cache Attacks
+
+As noted earlier, flush+flush or Branch History Attacks are not detectable by
+this method.
 
 For this purpose Barnwold uses the so-called Counting Mode of the Performance
 Monitor Unit (PMU) of the processor. In contrast to the Sampling Mode, the
@@ -58,3 +67,4 @@ some of the provided PoCs may also not work at your local PC.
 # Related Work
 
 - https://yinqian.org/papers/dimva21.pdf
+- https://www.mdpi.com/2076-3417/10/3/984
