@@ -1,7 +1,7 @@
 extern crate clap;
 use clap::{Arg, Command};
 
-use libc;
+
 use perf_event::events::Hardware;
 use perf_event::Builder;
 use rand::seq::SliceRandom;
@@ -44,7 +44,7 @@ fn generate_cpu_list(mut rng: rand::rngs::ThreadRng) -> Vec<usize> {
     let no_cpus = get_num_cpus() - 1;
     let mut numbers: Vec<usize> = (0..=no_cpus).collect();
     numbers.shuffle(&mut rng);
-    return numbers;
+    numbers
 }
 
 fn cli() -> Command {
@@ -70,7 +70,7 @@ fn parse_args() -> Config {
         cfg.verbose = *c;
     }
 
-    return cfg;
+    cfg
 }
 
 fn recording(cpu: usize, record_time: usize, cfg: &Config) {
