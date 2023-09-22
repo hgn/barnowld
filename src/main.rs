@@ -4,8 +4,11 @@ use clap::{Arg, Command};
 use libc;
 use perf_event::events::Hardware;
 use perf_event::Builder;
+use rand::seq::SliceRandom;
 use std::thread;
 use std::time::Duration;
+
+use rand::Rng;
 
 pub struct Config {
     verbose: bool,
@@ -37,6 +40,13 @@ fn xsleep(sleeptime: u64) {
     thread::sleep(sleep_duration);
 }
 
+fn generate_cpu_list(mut rng: rand::rngs::ThreadRng) -> Vec<usize> {
+    let no_cpus = get_num_cpus() - 1;
+    let mut numbers: Vec<usize> = (0..=no_cpus).collect();
+    numbers.shuffle(&mut rng);
+    return numbers;
+}
+
 fn cli() -> Command {
     Command::new("barnowld")
         .version("0.1.0")
@@ -63,22 +73,24 @@ fn parse_args() -> Config {
     return cfg;
 }
 
-fn recording(cpu: usize, cfg: Config) {
+fn recording(cpu: usize, record_time: usize, cfg: &Config) {
     let mut cache_refs = Builder::new()
         .one_cpu(cpu)
         .observe_pid(-1)
         .kind(Hardware::CACHE_REFERENCES)
-        .build().unwrap();
+        .build()
+        .unwrap();
 
     let mut cache_misses = Builder::new()
         .one_cpu(cpu)
         .observe_pid(-1)
         .kind(Hardware::CACHE_MISSES)
-        .build().unwrap();
+        .build()
+        .unwrap();
 
     cache_refs.enable().unwrap();
     cache_misses.enable().unwrap();
-    xsleep(2);
+    xsleep(record_time as u64);
     cache_refs.disable().unwrap();
     cache_misses.disable().unwrap();
 
@@ -92,14 +104,20 @@ fn recording(cpu: usize, cfg: Config) {
             cache_misses_no, cache_refs_no, ratio
         );
     }
-
 }
 
 fn main() -> std::io::Result<()> {
+    let mut rng = rand::thread_rng();
     let cfg = parse_args();
-    let no_cpus = get_num_cpus();
 
-    recording(0, cfg);
+    let rng2 = rand::thread_rng();
+    let cpus = generate_cpu_list(rng2);
+
+    for cpu in &cpus {
+        let record_time = rng.gen_range(5..=10);
+        println!("checking cpu {} for {} seconds", cpu, record_time);
+        recording(*cpu, record_time, &cfg);
+    }
 
     Ok(())
 }
