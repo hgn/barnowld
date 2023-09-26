@@ -10,6 +10,9 @@ release:
 clippy:
 	cargo clippy
 
+clean:
+	cargo clean
+
 run:
 	cargo run
 
