@@ -1,6 +1,5 @@
 extern crate clap;
-use clap::{Arg, Command};
-
+use clap::{value_parser, Arg, Command};
 
 use perf_event::events::Hardware;
 use perf_event::Builder;
@@ -12,6 +11,8 @@ use rand::Rng;
 
 pub struct Config {
     verbose: bool,
+    cpu_min: usize,
+    cpu_max: usize,
 }
 
 impl Default for Config {
@@ -21,13 +22,12 @@ impl Default for Config {
 }
 
 impl Config {
-
     pub fn new() -> Self {
-        Config { verbose: false }
-    }
-
-    pub fn verbose(&self) -> bool {
-        self.verbose
+        Config {
+            verbose: false,
+            cpu_min: usize::MAX,
+            cpu_max: usize::MAX,
+        }
     }
 }
 
@@ -47,9 +47,30 @@ fn xsleep(sleeptime: u64) {
     thread::sleep(sleep_duration);
 }
 
-fn generate_cpu_list(mut rng: rand::rngs::ThreadRng) -> Vec<usize> {
+fn generate_cpu_list(mut rng: rand::rngs::ThreadRng, cfg: &Config) -> Vec<usize> {
+    let mut cpu_start = 0;
     let no_cpus = get_num_cpus() - 1;
-    let mut numbers: Vec<usize> = (0..=no_cpus).collect();
+    let mut cpu_end = no_cpus;
+    if cfg.cpu_min != usize::MAX {
+        // user specified custom cpu start
+        if cfg.cpu_min > no_cpus {
+            panic!(
+                "specified cpu_min {} higher then number of CPUs {}",
+                cfg.cpu_min, no_cpus
+            );
+        }
+        cpu_start = cfg.cpu_min;
+    }
+    if cfg.cpu_max != usize::MAX {
+        if cfg.cpu_max > no_cpus {
+            panic!(
+                "specified cpu_max {} higher then number of CPUs {}",
+                cfg.cpu_max, no_cpus
+            );
+        }
+        cpu_end = cfg.cpu_max;
+    }
+    let mut numbers: Vec<usize> = (cpu_start..=cpu_end).collect();
     numbers.shuffle(&mut rng);
     numbers
 }
@@ -67,6 +88,20 @@ fn cli() -> Command {
                 .num_args(0)
                 .help("Increase verbosity level"),
         )
+        .arg(
+            Arg::new("cpu-min")
+                .long("cpu-min")
+                .required(false)
+                .value_parser(value_parser!(usize))
+                .help("Limits the analysed CPU range (minimum CPU), starts with 0"),
+        )
+        .arg(
+            Arg::new("cpu-max")
+                .long("cpu-max")
+                .required(false)
+                .value_parser(value_parser!(usize))
+                .help("Limits the analysed CPU range (maximum CPU), max: mumber of cores - 1"),
+        )
 }
 
 fn parse_args() -> Config {
@@ -75,6 +110,12 @@ fn parse_args() -> Config {
 
     if let Some(c) = matches.get_one::<bool>("verbose") {
         cfg.verbose = *c;
+    }
+    if let Some(c) = matches.get_one::<usize>("cpu-min") {
+        cfg.cpu_min = *c
+    }
+    if let Some(c) = matches.get_one::<usize>("cpu-max") {
+        cfg.cpu_max = *c
     }
 
     cfg
@@ -118,7 +159,7 @@ fn main() -> std::io::Result<()> {
     let cfg = parse_args();
 
     let rng2 = rand::thread_rng();
-    let cpus = generate_cpu_list(rng2);
+    let cpus = generate_cpu_list(rng2, &cfg);
 
     for cpu in &cpus {
         let record_time = rng.gen_range(5..=10);
