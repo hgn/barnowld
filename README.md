@@ -16,6 +16,10 @@ and the project name was still available. You can choose the reason yourself.*
 > side-channel attacks like *flush + flush attacks* are not detected - due to
 > the fact that only cache charateristics are analysed.
 
+<p align="center">
+  <img src=".github/assets/side-channel-illustrated.png" alt="cache side channel illustrated"><br>
+</p>
+
 ---
 
 **Idea of the daemon: try to detect conspicuous CPU characteristics with as little
