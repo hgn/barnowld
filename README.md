@@ -10,11 +10,11 @@ unnatural frequent failed accesses to CPU cache lines. Alternatively the name
 is selected because the name can easily be turned into a cute logo via DALL-E 2
 and the project name was still available. You can choose the reason yourself.*
 
-> **Disclaimer:** barnowld is a "Weekend PoC Project". I have tested it with
-> many different side-channel PoCs, and carefully tuned thresholds, but in the
-> end it needs more validation to be used productively! Some classes of
-> side-channel attacks like *flush + flush attacks* are not detected - due to
-> the fact that only cache charateristics are analysed.
+> **Disclaimer:** barnowld is a PoC - I have tested it with many different
+> cache side-channel PoCs, and carefully tuned thresholds, but in the end it
+> needs more validation to be used productively! Some classes of side-channel
+> attacks like *flush + flush attacks* are not detected - due to the fact that
+> only cache charateristics are analysed.
 
 <p align="center">
   <img src=".github/assets/side-channel-illustrated.png" alt="cache side channel illustrated"><br>
