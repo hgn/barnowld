@@ -8,7 +8,7 @@
 animal world. Just the right 	organ of perception to detect the smallest but
 unnatural frequent failed accesses to CPU cache lines. Alternatively the name
 is selected because the name can easily be turned into a cute logo via DALL-E 2
-and the project name was still available. You can choose the reason yourself.*
+and the project name was still unique enough. You can choose the reason yourself.*
 
 > **Disclaimer:** barnowld is a PoC - I have tested it with many different
 > cache side-channel PoCs, and carefully tuned thresholds, but in the end it
