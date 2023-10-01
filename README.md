@@ -13,8 +13,10 @@ and the project name was still available. You can choose the reason yourself.*
 > **Disclaimer:** barnowld is a PoC - I have tested it with many different
 > cache side-channel PoCs, and carefully tuned thresholds, but in the end it
 > needs more validation to be used productively! Some classes of side-channel
-> attacks like *flush + flush attacks* are not detected - due to the fact that
-> only cache charateristics are analysed.
+> attacks like *flush + flush attacks* or utilizing the branch target buffer
+> are not detected - due to the fact that only cache characteristics are
+> analysed (but I have a few ideas to detect them as well, but this goes along
+> with the use of vendor specific PMU events).
 
 <p align="center">
   <img src=".github/assets/side-channel-illustrated.png" alt="cache side channel illustrated"><br>
@@ -127,7 +129,7 @@ the RISC-V world) for abnormalities over a certain period of time. In doing so,
 it iterates over time and in a pseudo-random fashion over the CPUs to make
 countermeasures more difficult. Then Barnowl analyzes the cache reference and
 cache missrate for a certain amount of time - again pseudo-randomly. Here
-especially the last level cache charactetristics. Basically the following Cache
+especially the last level cache characteristics. Basically the following Cache
 Side-Channel attacks should be detectable:
 
 - Flush+Reload
