@@ -102,7 +102,7 @@ void victim_function(size_t x) {
 		 * add a serializing instruction after the boundary check to force
 		 * the retirement of previous instructions before proceeding to 
 		 * the read.
-		 * See https://newsroom.intel.com/wp-content/uploads/sites/11/2018/01/Intel-Analysis-of-Speculative-Execution-Side-Channels.pdf
+		 * See https://www.intel.com/content/dam/www/public/us/en/documents/white-papers/analysis-of-speculative-execution-side-channels-white-paper.pdf
 		 */
 		_mm_lfence();
 #endif
