@@ -1,4 +1,6 @@
-name: Minikube 
+name: Minikube
+
+on:
   workflow_run:
     workflows: ["build-and-push-image"]
     branches: [main]
