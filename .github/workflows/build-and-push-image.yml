@@ -36,6 +36,9 @@ jobs:
           components: rustfmt
           override: true
       - uses: Swatinem/rust-cache@v1
+      - name: Rustup install musl
+      - run: rustup target add x86_64-unknown-linux-musl
+      
       - name: check out sources
         uses: actions/checkout@v3
       - name: Make musl
