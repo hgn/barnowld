@@ -20,4 +20,5 @@ jobs:
     - name: Deploy to minikube
       run: |
         kubectl create -f kubernetes/daemonset.yaml
+        kubectl rollout status daemonset -n kube-system barnowl --timeout 60s
         kubectl logs -n kube-system   -l name=barnowl
