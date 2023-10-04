@@ -1,0 +1,19 @@
+name: Minikube 
+  workflow_run:
+    workflows: ["build-and-push-image"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    name: build example and deploy to minikube
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start minikube
+      uses: medyagh/setup-minikube@master
+    - name: Deploy to minikube
+      run: |
+        kubectl create -f kubernetes/daemonset.yaml
+        kubectl logs -n kube-system   -l name=barnowl
