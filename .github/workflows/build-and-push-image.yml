@@ -36,21 +36,10 @@ jobs:
           components: rustfmt
           override: true
       - uses: Swatinem/rust-cache@v1
-      - name: Make musl
-        run: make musl
       - name: check out sources
         uses: actions/checkout@v3
-      - name: cargo doc
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --document-private-items
-          
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
+      - name: Make musl
+        run: make musl
       - name: Log in to the Container registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
