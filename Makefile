@@ -13,12 +13,12 @@ all: build docker
 build:
 	cargo build
 
-musl:
+musl: container/barnowld
 	cargo build --target=x86_64-unknown-linux-musl 
+	strip target/x86_64-unknown-linux-musl/debug/barnowld -o container/barnowld
 
 
 docker: musl
-	strip target/x86_64-unknown-linux-musl/debug/barnowld -o container/barnowld
 	docker build -t barnowld container 
 
 release:
