@@ -6,16 +6,11 @@
 name: Create and publish a Docker image
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - "v*"
-  workflow_dispatch:
-    branches:
-      - main
-    tags:
-      - "v*"
+  workflow_run:
+    workflows: ["test"]
+    branches: [main]
+    types: 
+      - completed
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}

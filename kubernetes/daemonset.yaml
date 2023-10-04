@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: barnowl
+  namespace: kube-system
+  labels:
+    name: barnowl
+spec:
+  selector:
+    matchLabels:
+      name: barnowl
+  template:
+    metadata:
+      labels:
+        name: barnowl
+    spec:
+      hostPID: true
+      containers:
+        - securityContext:
+            privileged: true
+          image: ghcr.io/thomasfricke/barnowld:main
+          name: barnowl 
