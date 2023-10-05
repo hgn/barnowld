@@ -2,7 +2,7 @@ name: Minikube
 
 on:
   workflow_run:
-    workflows: ["build-and-push-image"]
+    workflows: ["Create and publish a Docker image"]
     branches: [main]
     types:
       - completed
@@ -21,4 +21,4 @@ jobs:
       run: |
         kubectl create -f kubernetes/daemonset.yaml
         sleep 10
-        kubectl logs -n kube-system   -l name=barnowl do 
+        kubectl logs -n kube-system   -l name=barnowl
