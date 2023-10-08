@@ -8,10 +8,18 @@ DST_SERVICEDIR = /etc/systemd/system
 SERVICEFILE = barnowld.service
 
 
-all: build
+all: build docker
 
 build:
 	cargo build
+
+musl: 
+	cargo build --target=x86_64-unknown-linux-musl 
+	strip target/x86_64-unknown-linux-musl/debug/barnowld -o container/barnowld
+
+
+docker: musl
+	docker build -t barnowld container 
 
 release:
 	cargo build --release
@@ -68,4 +76,4 @@ help-service:
 	@echo sudo journalctl -u $(SERVICEFILE) -f
 
 
-.PHONY: build install uninstall help-service get-pocs format-check format test clean clippy
+.PHONY: build install uninstall help-service get-pocs format-check format test clean clippy musl
