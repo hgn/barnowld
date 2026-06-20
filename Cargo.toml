@@ -1,3 +1,7 @@
+[workspace]
+members = [".", "simulation"]
+resolver = "2"
+
 [package]
 name = "barnowld"
 authors = ["Hagen Paul Pfeifer <hagen@jauu.net>"]

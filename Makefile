@@ -13,19 +13,19 @@ all: build docker
 build:
 	cargo build
 
-musl: 
-	cargo build --target=x86_64-unknown-linux-musl 
+musl:
+	cargo build --target=x86_64-unknown-linux-musl
 	strip target/x86_64-unknown-linux-musl/debug/barnowld -o container/barnowld
 
 
 docker: musl
-	docker build -t barnowld container 
+	docker build -t barnowld container
 
 release:
 	cargo build --release
 
 clippy:
-	cargo clippy
+	cargo clippy --workspace
 
 clean:
 	cargo clean
@@ -33,14 +33,43 @@ clean:
 run:
 	cargo run
 
-test: build
-	cargo test
+# ── Tests ─────────────────────────────────────────────────────────────────────
+
+# Unit tests (barnowld) run in parallel; simulation tests must run serially
+# because large buffer allocations across parallel threads corrupt LLC measurements.
+test:
+	cargo test -p barnowld
+	cargo test -p barnowld-simulation -- --test-threads 1
+
+# Simulation tests only (serial, no root).
+test-simulation:
+	cargo test -p barnowld-simulation -- --test-threads 1
+
+# Full simulation tests including system-wide PMU (requires root).
+# Uses --test-threads 1 because system-wide tests monitor the same CPU; parallel
+# execution causes cross-test contamination and false failures.
+# Uses the full toolchain path because sudo does not inherit the user's rustup shim.
+test-simulation-syswide:
+	sudo env PATH=$(HOME)/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$(PATH) \
+	     RUSTUP_HOME=$(HOME)/.rustup CARGO_HOME=$(HOME)/.cargo \
+	     cargo test -p barnowld-simulation -- --include-ignored --test-threads 1
+
+# Run everything: unit tests + all simulation tests (including system-wide).
+test-all: test test-simulation-syswide
+
+# Run the standalone attack simulator binary (per-process, no root).
+simulate:
+	cargo run -p barnowld-simulation
+
+# ── Formatting ────────────────────────────────────────────────────────────────
 
 format:
-	rustfmt src/*
+	cargo fmt --all
 
 format-check:
 	cargo fmt --all -- --check
+
+# ── Install ───────────────────────────────────────────────────────────────────
 
 get-pocs:
 	@mkdir poc
@@ -76,4 +105,6 @@ help-service:
 	@echo sudo journalctl -u $(SERVICEFILE) -f
 
 
-.PHONY: build install uninstall help-service get-pocs format-check format test clean clippy musl
+.PHONY: build install uninstall help-service get-pocs format-check format \
+        test test-simulation test-simulation-syswide test-all simulate \
+        clippy clean run release musl docker
